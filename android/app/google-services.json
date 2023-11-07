@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189343813154",
+    "project_id": "flutterdemo-bfa20",
+    "storage_bucket": "flutterdemo-bfa20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189343813154:android:57852bb84092614a22c47b",
+        "android_client_info": {
+          "package_name": "com.imasha.flutter_demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN-gFUPMb5eQVSBRAmhtZmXWhvGuzqTdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

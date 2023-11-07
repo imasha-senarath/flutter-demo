@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/views/login_view.dart';
 
@@ -30,11 +31,7 @@ class MyHamburger extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             onTap: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => LoginView(),
-                ),
-              );
+              FirebaseAuth.instance.signOut();
             },
           ),
         ],

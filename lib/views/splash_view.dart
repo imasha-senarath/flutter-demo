@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/views/home_view.dart';
-import 'package:flutter_demo/views/login_view.dart';
+import 'package:flutter_demo/services/auth.dart';
 import '../const.dart';
 
 class SplashView extends StatelessWidget {
@@ -12,7 +11,7 @@ class SplashView extends StatelessWidget {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (BuildContext context) => const LoginView(),
+          builder: (BuildContext context) => const MyAuth(),
         ),
       );
     });
