@@ -1,7 +1,7 @@
 class Post {
-  final String id;
-  final String title;
-  final String description;
+  String? id;
+  String title;
+  String description;
 
-  Post(this.id, this.title, this.description);
+  Post({required this.id, required this.title, required this.description});
 }

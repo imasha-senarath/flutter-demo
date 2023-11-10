@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/components/app_bar.dart';
 import 'package:flutter_demo/components/button.dart';
 import 'package:flutter_demo/components/dialog.dart';
 import 'package:flutter_demo/const.dart';
@@ -15,11 +16,11 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final emalController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   void userLogin() {
-    String emailValue = emalController.text;
+    String emailValue = emailController.text;
     String passwordValue = passwordController.text;
 
     if (emailValue == "imasha" && passwordValue == "1234") {
@@ -41,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void userFirebaseLogin() async {
-    String emailValue = emalController.text;
+    String emailValue = emailController.text;
     String passwordValue = passwordController.text;
 
     if (emailValue.isEmpty || passwordValue.isEmpty) {
@@ -125,7 +126,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               MyTextField(
                 hintText: 'Email',
-                controller: emalController,
+                controller: emailController,
                 obscureText: false,
                 icon: const Icon(Icons.email),
               ),
