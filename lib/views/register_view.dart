@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/components/app_bar.dart';
 import 'package:flutter_demo/components/button.dart';
 import 'package:flutter_demo/components/dialog.dart';
 import 'package:flutter_demo/const.dart';
+import 'package:flutter_demo/views/home_view.dart';
 import 'package:flutter_demo/views/main_view.dart';
 
 import '../components/text_field.dart';
@@ -16,36 +18,16 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void userLogin() {
+  void userRegister() async {
     String emailValue = emailController.text;
     String passwordValue = passwordController.text;
+    String nameValue = nameController.text;
 
-    if (emailValue == "imasha" && passwordValue == "1234") {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => const MainView(),
-        ),
-      );
-    } else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const MyDialog(
-              title: 'Error',
-              description: 'Invalid credentials',
-            );
-          });
-    }
-  }
-
-  void userFirebaseLogin() async {
-    String emailValue = emailController.text;
-    String passwordValue = passwordController.text;
-
-    if (emailValue.isEmpty || passwordValue.isEmpty) {
+    if (nameValue.isEmpty || emailValue.isEmpty || passwordValue.isEmpty) {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -66,12 +48,29 @@ class _RegisterViewState extends State<RegisterView> {
       );
 
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailValue,
           password: passwordValue,
         );
-        Navigator.of(context).pop();
-      } on FirebaseAuthException catch (e) {
+
+        CollectionReference usersCollectionReference =
+            FirebaseFirestore.instance.collection('Users');
+
+        Map<String, dynamic> userData = {
+          'email': userCredential.user?.email,
+          'name': nameValue,
+        };
+
+        usersCollectionReference.doc(userCredential.user?.uid).set(userData);
+
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const MainView(),
+          ),
+        );
+      } on FirebaseException catch (e) {
         Navigator.of(context).pop();
         showDialog(
             context: context,
@@ -125,6 +124,16 @@ class _RegisterViewState extends State<RegisterView> {
                 height: 30.0,
               ),
               MyTextField(
+                hintText: 'Name',
+                controller: nameController,
+                obscureText: false,
+                icon: const Icon(Icons.person),
+                multiLine: 1,
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              MyTextField(
                 hintText: 'Email',
                 controller: emailController,
                 obscureText: false,
@@ -145,8 +154,8 @@ class _RegisterViewState extends State<RegisterView> {
                 height: 15.0,
               ),
               MyButton(
-                onTap: userFirebaseLogin,
-                name: 'Login',
+                onTap: userRegister,
+                name: 'Register',
               ),
               const SizedBox(
                 height: 15.0,
@@ -154,7 +163,7 @@ class _RegisterViewState extends State<RegisterView> {
               Row(
                 children: [
                   const Text(
-                    "New User?",
+                    "Already registered?",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -164,16 +173,12 @@ class _RegisterViewState extends State<RegisterView> {
                     width: 5.0,
                   ),
                   InkWell(
-                    onTap:  () {
-
-                    },
+                    onTap: () {},
                     child: const Text(
-                      "Register",
+                      "Login.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

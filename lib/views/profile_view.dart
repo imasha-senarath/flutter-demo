@@ -24,7 +24,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    _setPosts();
+
   }
 
   Future<List<Post>> _getPosts() async {
@@ -43,13 +43,6 @@ class _ProfileViewState extends State<ProfileView> {
     }
 
     return list;
-  }
-
-  Future<void> _setPosts() async {
-    List<Post> posts = await _getPosts();
-    setState(() {
-      postList = posts;
-    });
   }
 
   @override

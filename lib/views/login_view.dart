@@ -5,6 +5,7 @@ import 'package:flutter_demo/components/button.dart';
 import 'package:flutter_demo/components/dialog.dart';
 import 'package:flutter_demo/const.dart';
 import 'package:flutter_demo/views/main_view.dart';
+import 'package:flutter_demo/views/register_view.dart';
 
 import '../components/text_field.dart';
 
@@ -19,29 +20,7 @@ class _LoginViewState extends State<LoginView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void userLogin() {
-    String emailValue = emailController.text;
-    String passwordValue = passwordController.text;
-
-    if (emailValue == "imasha" && passwordValue == "1234") {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => const MainView(),
-        ),
-      );
-    } else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const MyDialog(
-              title: 'Error',
-              description: 'Invalid credentials',
-            );
-          });
-    }
-  }
-
-  void userFirebaseLogin() async {
+  void userLogin() async {
     String emailValue = emailController.text;
     String passwordValue = passwordController.text;
 
@@ -70,6 +49,8 @@ class _LoginViewState extends State<LoginView> {
           email: emailValue,
           password: passwordValue,
         );
+
+        if (!mounted) return;
         Navigator.of(context).pop();
       } on FirebaseAuthException catch (e) {
         Navigator.of(context).pop();
@@ -145,7 +126,7 @@ class _LoginViewState extends State<LoginView> {
                 height: 15.0,
               ),
               MyButton(
-                onTap: userFirebaseLogin,
+                onTap: userLogin,
                 name: 'Login',
               ),
               const SizedBox(
@@ -164,16 +145,19 @@ class _LoginViewState extends State<LoginView> {
                     width: 5.0,
                   ),
                   InkWell(
-                    onTap:  () {
-
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const RegisterView(),
+                        ),
+                      );
                     },
                     child: const Text(
                       "Register",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
