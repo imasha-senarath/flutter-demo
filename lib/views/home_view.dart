@@ -69,7 +69,8 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> deletePost(String postId) async {
     try {
-      DocumentReference documentReference = postsCollectionReference.doc(postId);
+      DocumentReference documentReference =
+          postsCollectionReference.doc(postId);
       await documentReference.delete();
 
       Fluttertoast.showToast(
@@ -94,20 +95,31 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: Center(
-        child: ListView.builder(
-          itemCount: postList.length,
-          itemBuilder: (context, index) {
-            Post post = postList[index];
-            return MyPost(
-              title: post.title,
-              description: post.description,
-              onTap: () {
-                postClicked(post.id.toString());
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Posts").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasData) {
+            final items = snapshot.data?.docs ?? [];
+            return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index].data() as Map<String, dynamic>;
+                final itemId = items[index].id;
+                return MyPost(
+                  title: item['title'],
+                  description: item['description'],
+                  onTap: () {
+                    postClicked(itemId);
+                  },
+                );
               },
             );
-          },
-        ),
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -121,6 +133,24 @@ class _HomeViewState extends State<HomeView> {
         child: const Icon(
           Icons.add,
         ),
+      ),
+    );
+  }
+
+  Center myListView() {
+    return Center(
+      child: ListView.builder(
+        itemCount: postList.length,
+        itemBuilder: (context, index) {
+          Post post = postList[index];
+          return MyPost(
+            title: post.title,
+            description: post.description,
+            onTap: () {
+              postClicked(post.id.toString());
+            },
+          );
+        },
       ),
     );
   }

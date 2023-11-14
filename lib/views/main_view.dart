@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/components/hamburger.dart';
 import 'package:flutter_demo/views/home_view.dart';
+import 'package:flutter_demo/views/profile_view.dart';
 
 import '../const.dart';
 
@@ -35,7 +36,7 @@ class _MainViewState extends State<MainView> {
         controller: _pageController,
         children: const <Widget>[
           HomeView(),
-          PageTwo(),
+          ProfileView(),
         ],
         onPageChanged: (index) {
           setState(() {
@@ -57,17 +58,6 @@ class _MainViewState extends State<MainView> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class PageTwo extends StatelessWidget {
-  const PageTwo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Page 2 Content'),
     );
   }
 }

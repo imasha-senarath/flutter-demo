@@ -97,6 +97,7 @@ class _AddPostViewState extends State<AddPostView> {
                 controller: titleController,
                 obscureText: false,
                 icon: const Icon(null),
+                multiLine: 1,
               ),
               const SizedBox(
                 height: 10.0,
@@ -104,8 +105,9 @@ class _AddPostViewState extends State<AddPostView> {
               MyTextField(
                 hintText: 'Description',
                 controller: descriptionController,
-                obscureText: true,
+                obscureText: false,
                 icon: const Icon(null),
+                multiLine: null,
               ),
               const SizedBox(
                 height: 15.0,

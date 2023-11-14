@@ -8,14 +8,14 @@ import 'package:flutter_demo/views/main_view.dart';
 
 import '../components/text_field.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _RegisterViewState extends State<RegisterView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
