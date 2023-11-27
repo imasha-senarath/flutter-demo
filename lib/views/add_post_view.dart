@@ -5,8 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../components/button.dart';
 import '../components/dialog.dart';
 import '../components/text_field.dart';
-import '../const.dart';
-import '../model/post.dart';
 
 class AddPostView extends StatefulWidget {
   const AddPostView({Key? key}) : super(key: key);

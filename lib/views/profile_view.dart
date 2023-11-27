@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/components/post.dart';
 import 'package:flutter_demo/const.dart';
-import 'package:flutter_demo/views/add_post_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../components/bottom_sheet_menu.dart';
 import '../model/post.dart';
 
 class ProfileView extends StatefulWidget {
@@ -16,33 +12,39 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  List<Post> postList = [];
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  CollectionReference postsCollectionReference =
-      FirebaseFirestore.instance.collection('Posts');
+  late String? userId;
+
+  CollectionReference usersCollectionReference =
+      FirebaseFirestore.instance.collection('Users');
 
   @override
   void initState() {
     super.initState();
 
+    User? user = auth.currentUser;
+    userId = user?.uid;
   }
 
-  Future<List<Post>> _getPosts() async {
-    List<Post> list = [];
+  Future<void> _getUserData() async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('your_collection') // replace with your collection name
+          .doc('your_document_id') // replace with your document ID
+          .get();
 
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('Posts').get();
-
-    for (var doc in querySnapshot.docs) {
-      Map<String, dynamic> data = doc.data();
-      list.add(Post(
-        id: doc.id,
-        title: data['title'],
-        description: data['description'],
-      ));
+      if (documentSnapshot.exists) {
+        // Document exists, you can access the data
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        print('Document data: $data');
+      } else {
+        print('Document does not exist');
+      }
+    } catch (error) {
+      print('Error getting document: $error');
     }
-
-    return list;
   }
 
   @override
@@ -60,13 +62,8 @@ class _ProfileViewState extends State<ProfileView> {
               color: primaryColor,
               size: 100.0,
             ),
-            const Text(
-              "John Smith",
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold
-              )
-            )
+            const Text("--",
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold))
           ],
         ),
       ),

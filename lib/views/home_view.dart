@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/components/confirm_dialog.dart';
 import 'package:flutter_demo/components/post.dart';
 import 'package:flutter_demo/views/add_post_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../components/bottom_sheet_menu.dart';
+import '../components/dialog.dart';
 import '../model/post.dart';
 
 class HomeView extends StatefulWidget {
@@ -59,7 +61,15 @@ class _HomeViewState extends State<HomeView> {
           onItemSelected: (value) {
             if (value == 'View') {
             } else if (value == 'Delete') {
-              deletePost(postId);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return MyConfirmDialog(
+                      title: 'Delete',
+                      description: "Are you sure want to delete?",
+                      onTap: deletePost(postId),
+                    );
+                  });
             }
           },
         );
@@ -125,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => const AddPostView(),
+              builder:  (BuildContext context) => const AddPostView(),
             ),
           );
         },
